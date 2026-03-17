@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Smart Admin</title>
+    <title>Park Hello - Admin Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -13,19 +13,20 @@
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
         th { background: #f1f5f9; font-weight: 600; }
-        .btn-qr { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-qr { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; text-decoration: none; display: inline-block; text-align: center; }
         
         /* QR Preview Modal */
         #qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; width: 320px; position: relative; }
         
         /* Sticker Styling */
-        .sticker-frame { border: 2px solid #eee; padding: 20px; border-radius: 15px; margin-bottom: 20px; background: #fff; }
-        .brand-name { font-size: 22px; font-weight: bold; color: #1a73e8; margin-top: 10px; display: block; }
-        .promo-text { font-size: 10px; color: #64748b; margin-top: 5px; font-weight: 600; }
+        .sticker-frame { border: 2px solid #eee; padding: 25px; border-radius: 15px; margin-bottom: 20px; background: #fff; text-align: center; }
+        .contact-title { font-size: 24px; font-weight: bold; color: #1a73e8; display: block; margin-top: 15px; line-height: 1.2; }
+        .contact-title span { display: block; }
+        .promo-text { font-size: 11px; color: #64748b; margin-top: 10px; font-weight: 600; }
+        .whatsapp-link { font-size: 12px; font-weight: bold; color: #25d366; text-decoration: none; margin-top: 5px; display: block; }
         
         .controls { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; justify-content: center; }
-        select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; }
         .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #94a3b8; }
     </style>
 </head>
@@ -35,13 +36,6 @@
     <h2>📊 Park Hello Dashboard</h2>
     
     <div class="controls">
-        <label>QR Theme:</label>
-        <select id="qrColor">
-            <option value="#000000">Classic Black</option>
-            <option value="#1a73e8">Professional Blue</option>
-            <option value="#059669">Safety Green</option>
-            <option value="#dc2626">Emergency Red</option>
-        </select>
         <button onclick="loadUsers()" style="padding: 8px; cursor: pointer;">🔄 Refresh List</button>
     </div>
 
@@ -50,6 +44,7 @@
             <tr>
                 <th>Name</th>
                 <th>Vehicle</th>
+                <th>Phone</th>
                 <th>Action</th>
             </tr>
         </thead>
@@ -63,9 +58,17 @@
         <span class="close-btn" onclick="closeModal()">×</span>
         <div id="printable-sticker" class="sticker-frame">
             <div id="qrcode" style="display: flex; justify-content: center;"></div>
-            <span class="brand-name">Park Hello</span>
-            <div id="sticker-car-num" style="font-weight: bold; font-size: 14px; margin-top: 5px;"></div>
-            <p class="promo-text">Want this for your car? <br> Scan to Register!</p>
+            
+            <div class="contact-title">
+                <span>Contact</span>
+                <span>Car</span>
+                <span>Owner</span>
+            </div>
+            
+            <div id="sticker-car-num" style="font-weight: bold; font-size: 16px; margin-top: 10px; color: #1e293b;"></div>
+            
+            <p class="promo-text">Scan here to get this for your car!</p>
+            <a href="https://wa.me/923060157873" class="whatsapp-link" target="_blank">📲 Click Here to Contact Us</a>
         </div>
         <button class="btn-qr" onclick="downloadSticker()" style="width: 100%;">📥 Download Sticker</button>
     </div>
@@ -77,7 +80,7 @@
 
     async function loadUsers() {
         const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = "<tr><td colspan='3'>Loading users...</td></tr>";
+        tableBody.innerHTML = "<tr><td colspan='4'>Loading users...</td></tr>";
         
         try {
             const response = await fetch(scriptURL);
@@ -88,17 +91,19 @@
                 let row = `<tr>
                     <td>${user.name}</td>
                     <td><b>${user.car}</b></td>
+                    <td>${user.phone}</td>
                     <td><button class="btn-qr" onclick="generateSticker('${user.name}', '${user.car}', '${user.phone}')">Create QR</button></td>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
         } catch (error) {
-            tableBody.innerHTML = "<tr><td colspan='3'>Error loading data. Make sure Script URL is correct.</td></tr>";
+            tableBody.innerHTML = "<tr><td colspan='4'>Error loading data. Make sure Script URL is correct.</td></tr>";
         }
     }
 
     function generateSticker(name, car, phone) {
-        const qrColor = document.getElementById('qrColor').value;
+        // Aap ki hidayat ke mutabiq Blue Color hi rakha hai
+        const qrColor = "#1a73e8"; 
         const folderPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         const profileUrl = window.location.origin + folderPath + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
         
@@ -111,7 +116,8 @@
             width: 180,
             height: 180,
             colorDark : qrColor,
-            colorLight : "#ffffff"
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
         });
     }
 
@@ -123,7 +129,7 @@
         const sticker = document.getElementById('printable-sticker');
         html2canvas(sticker).then(canvas => {
             const link = document.createElement('a');
-            link.download = 'Park-Hello-Sticker.png';
+            link.download = 'Park-Hello-Official-Sticker.png';
             link.href = canvas.toDataURL();
             link.click();
         });
