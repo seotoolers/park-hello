@@ -3,80 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehicle Owner Profile - Park Hello</title>
+    <title>Emergency Profile - Park Hello</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --safety: #dc2626; }
-        body { font-family: 'Poppins', sans-serif; background: #f8fafc; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .profile-card { background: white; width: 100%; max-width: 350px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; text-align: center; }
-        .header { background: var(--primary); color: white; padding: 30px 20px; }
-        .car-icon { font-size: 50px; margin-bottom: 10px; }
-        .plate-number { background: #000; color: #facc15; display: inline-block; padding: 5px 15px; border-radius: 8px; font-weight: bold; letter-spacing: 1px; border: 2px solid #333; margin-top: 10px; }
-        .details { padding: 30px 20px; }
-        .owner-name { font-size: 20px; font-weight: 600; color: #1e293b; margin: 0; }
-        .status { color: #059669; font-size: 13px; font-weight: 600; margin-bottom: 20px; display: block; }
-        
-        /* Contact Button */
-        .btn-call { 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            background: var(--safety); 
-            color: white; 
-            text-decoration: none; 
-            padding: 15px; 
-            border-radius: 15px; 
-            font-weight: 600; 
-            font-size: 16px;
-            transition: 0.3s;
-            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
-        }
-        .btn-call:hover { transform: scale(1.02); background: #b91c1c; }
-        .btn-call span { margin-left: 10px; }
-        
-        .footer { padding-bottom: 25px; color: #94a3b8; font-size: 11px; }
+        :root { --emergency: #dc2626; --info: #1a73e8; --success: #059669; }
+        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; margin: 0; padding: 15px; }
+        .card { background: white; border-radius: 25px; overflow: hidden; box-shadow: 0 15px 35px rgba(0,0,0,0.15); max-width: 400px; margin: auto; }
+        .emergency-header { background: var(--emergency); color: white; padding: 25px 20px; text-align: center; }
+        .blood-tag { background: white; color: var(--emergency); padding: 8px 20px; border-radius: 12px; font-weight: bold; font-size: 22px; margin-top: 10px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .section { padding: 20px; border-bottom: 1px solid #f1f5f9; }
+        .label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .val { font-size: 17px; color: #1e293b; font-weight: 600; margin-top: 2px; }
+        .med-box { background: #fff5f5; border: 1px dashed var(--emergency); border-radius: 12px; padding: 12px; margin-top: 10px; }
+        .btn { display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; padding: 16px; border-radius: 15px; font-weight: 600; margin-top: 10px; font-size: 16px; transition: 0.2s; }
+        .btn-call-emergency { background: var(--emergency); box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3); }
+        .btn-call-owner { background: var(--info); }
+        .btn:active { transform: scale(0.97); }
     </style>
 </head>
 <body>
 
-    <div class="profile-card">
-        <div class="header">
-            <div class="car-icon">🚗</div>
-            <div class="plate-number" id="disp-car">LOADING...</div>
-        </div>
+<div class="card">
+    <div class="emergency-header">
+        <div style="font-size: 40px;">🆘</div>
+        <h2 style="margin:0; letter-spacing: 1px;">EMERGENCY DATA</h2>
+        <div class="blood-tag" id="blood">B+</div>
+    </div>
 
-        <div class="details">
-            <span class="status">● Verified Park Hello Member</span>
-            <h2 class="owner-name" id="disp-name">Vehicle Owner</h2>
-            <p style="color: #64748b; font-size: 14px; margin-bottom: 25px;">If this vehicle is causing an issue, please contact the owner below.</p>
-            
-            <a href="#" id="call-link" class="btn-call">
-                📞 <span>Contact Car Owner</span>
-            </a>
-        </div>
+    <div class="section">
+        <div class="label">Vehicle & Owner</div>
+        <div class="val" id="car">LEC-0000</div>
+        <div class="val" style="color: var(--info);" id="name">Name Loading...</div>
+    </div>
 
-        <div class="footer">
-            Powered by <b>Park Hello</b> Security System
+    <div class="section">
+        <div class="label">Medical History & Meds</div>
+        <div class="med-box">
+            <div class="val" style="font-size: 15px; color: var(--emergency);" id="history">History: Loading...</div>
+            <div style="font-size: 13px; color: #475569; margin-top: 5px;" id="meds">Meds: Loading...</div>
         </div>
     </div>
 
-    <script>
-        // URL سے ڈیٹا نکالنے کا فنکشن
-        const params = new URLSearchParams(window.location.search);
-        const name = params.get('name') || "Valued Member";
-        const car = params.get('car') || "N/A";
-        const phone = params.get('phone') || "";
+    <div class="section">
+        <div class="label">Emergency Actions</div>
+        <a href="#" id="call1" class="btn btn-call-emergency">📞 Call Family Contact 1</a>
+        <a href="#" id="call2" class="btn btn-call-emergency">📞 Call Family Contact 2</a>
+        <a href="#" id="callOwner" class="btn btn-call-owner">🚗 Contact Owner (Parking)</a>
+    </div>
 
-        // پیج پر ڈیٹا دکھانا
-        document.getElementById('disp-name').innerText = name;
-        document.getElementById('disp-car').innerText = car;
-        
-        // کال والے بٹن میں نمبر ڈالنا
-        if(phone) {
-            document.getElementById('call-link').href = "tel:" + phone;
-        } else {
-            document.getElementById('call-link').style.display = "none";
-        }
-    </script>
+    <div style="padding: 20px; text-align: center; background: #fafafa; font-size: 11px; color: #94a3b8;">
+        🛡️ Protected by <b>Park Hello</b> Security System
+    </div>
+</div>
+
+<script>
+    const url = new URLSearchParams(window.location.search);
+    
+    // ڈیٹا فل کرنا
+    document.getElementById('name').innerText = url.get('name') || "Unknown Owner";
+    document.getElementById('car').innerText = url.get('car') || "No Plate";
+    document.getElementById('blood').innerText = url.get('blood') || "N/A";
+    document.getElementById('history').innerText = "History: " + (url.get('history') || "None");
+    document.getElementById('meds').innerText = "Medications: " + (url.get('meds') || "None");
+
+    // کال لنکس سیٹ کرنا
+    if(url.get('phone')) document.getElementById('callOwner').href = "tel:" + url.get('phone');
+    if(url.get('fam1')) document.getElementById('call1').href = "tel:" + url.get('fam1');
+    if(url.get('fam2')) document.getElementById('call2').href = "tel:" + url.get('fam2');
+</script>
+
 </body>
 </html>
