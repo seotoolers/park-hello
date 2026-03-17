@@ -3,37 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Executive Admin</title>
+    <title>Park Hello - Secure Admin</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; --primary: #1a73e8; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
-        .container { max-width: 1000px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        
+        /* Protection Overlay */
+        #auth-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg); z-index: 10000; display: flex; 
+            justify-content: center; align-items: center; 
+        }
+        .auth-box { 
+            background: var(--card); padding: 30px; border-radius: 15px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; width: 300px; 
+        }
+
+        /* Dashboard Styles */
+        .container { max-width: 1000px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: none; }
         .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .controls { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: center; }
-        select, button { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; }
+        select, button, input { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        .btn-qr { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .btn-qr { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; }
         
         /* Modal & Sticker */
         #qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: white; padding: 25px; border-radius: 25px; text-align: center; width: 320px; color: #000; }
         .sticker-frame { border: 2px solid #eee; padding: 20px; border-radius: 15px; background: #fff; margin-bottom: 15px; }
         .contact-title { font-size: 22px; font-weight: bold; line-height: 1.1; margin-top: 10px; text-transform: uppercase; }
-        .contact-title span { display: block; }
         .pulse-text { color: red; font-size: 9px; font-weight: bold; animation: blink 1s infinite; margin-top: 10px; display: block; }
         @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body data-theme="light">
 
-<div class="container">
+<div id="auth-screen">
+    <div class="auth-box">
+        <h3 style="color: var(--primary);">Admin Login</h3>
+        <input type="password" id="passInput" placeholder="Enter Password" style="width: 80%; margin-bottom: 15px; text-align: center;">
+        <br>
+        <button onclick="verifyAccess()" style="width: 88%; background: var(--primary); color: white;">Unlock</button>
+        <p id="err" style="color: red; font-size: 12px; display: none; margin-top: 10px;">Incorrect Password!</p>
+    </div>
+</div>
+
+<div class="container" id="admin-panel">
     <div class="header-flex">
         <h2 style="color: var(--primary);">🅿️ Park Hello Admin</h2>
-        <button onclick="toggleTheme()">🌓 Dark/Light</button>
+        <div>
+            <button onclick="toggleTheme()">🌓 Theme</button>
+            <button onclick="logout()" style="background: #ff4757; color: white; border: none; margin-left: 10px;">Logout</button>
+        </div>
     </div>
 
     <div class="controls">
@@ -79,8 +104,38 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
+    // --- SETTINGS ---
+    const ADMIN_PASS = "Park786"; // Change your password here
     const scriptURL = 'https://script.google.com/macros/s/AKfycbxbuYcjVwk1hogCD00mwOAKlFtz-7QQV8xUyyXZT3dP6AOCQxtVQCo1OWhhyab_PVWo/exec';
 
+    // --- AUTH LOGIC ---
+    function verifyAccess() {
+        const val = document.getElementById('passInput').value;
+        if(val === ADMIN_PASS) {
+            sessionStorage.setItem('admin_auth', 'true');
+            initDashboard();
+        } else {
+            document.getElementById('err').style.display = 'block';
+        }
+    }
+
+    function initDashboard() {
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        loadUsers();
+    }
+
+    function logout() {
+        sessionStorage.removeItem('admin_auth');
+        window.location.reload();
+    }
+
+    // Check if already logged in
+    if(sessionStorage.getItem('admin_auth') === 'true') {
+        initDashboard();
+    }
+
+    // --- DASHBOARD LOGIC ---
     function toggleTheme() {
         const b = document.body;
         b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
@@ -108,8 +163,6 @@
     function generateQR(name, car, phone, blood, rel1, fam1, m1, rel2, fam2, m2) {
         const color = document.getElementById('qrColor').value;
         const folder = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-        
-        // یہ لنک تمام ڈیٹا کو profile.html تک لے کر جائے گا
         const url = window.location.origin + folder + "profile.html?" + 
             `car=${encodeURIComponent(car)}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&blood=${encodeURIComponent(blood)}` +
             `&rel1=${encodeURIComponent(rel1)}&fam1=${encodeURIComponent(fam1)}&m1=${encodeURIComponent(m1)}` +
@@ -138,8 +191,6 @@
             link.click();
         });
     }
-
-    loadUsers();
 </script>
 </body>
 </html>
