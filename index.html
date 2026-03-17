@@ -3,43 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Registration</title>
+    <title>Park Hello - Vehicle Registration</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 35px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        .success-msg { display: none; color: #059669; }
+        :root {
+            --primary: #1a73e8;
+            --success: #25d366;
+            --bg: #f1f5f9;
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+            text-align: center; 
+        }
+
+        .logo { font-size: 40px; margin-bottom: 10px; }
+        h2 { margin: 0; color: #0f172a; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+
+        input { 
+            width: 100%; 
+            padding: 12px 15px; 
+            margin: 10px 0; 
+            border: 2px solid #e2e8f0; 
+            border-radius: 12px; 
+            font-size: 15px; 
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); }
+
+        .btn-submit { 
+            width: 100%; 
+            padding: 14px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        .btn-submit:hover { background: #1557b0; transform: translateY(-2px); }
+
+        /* Payment UI */
+        .payment-box {
+            text-align: left;
+            background: #fff9c4;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #fbc02d;
+            margin: 20px 0;
+        }
+
+        .whatsapp-btn {
+            display: block;
+            background: var(--success);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
 
     <div class="card" id="mainCard">
-        <h2 style="margin:0;">🅿️ Park Hello</h2>
-        <p style="color:#666; font-size:14px; margin-bottom: 20px;">Register Your Vehicle</p>
+        <div class="logo">🅿️</div>
+        <h2>Park Hello</h2>
+        <p>Register Your Vehicle Securely</p>
         
         <input type="text" id="ownerName" placeholder="Owner Full Name">
-        <input type="text" id="carNum" placeholder="Vehicle Plate Number" style="text-transform:uppercase;">
+        <input type="text" id="carNum" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
         <input type="tel" id="phone" placeholder="WhatsApp Number">
         
-        <button class="btn" id="submitBtn" onclick="sendData()">Register & Request QR</button>
+        <button class="btn-submit" id="regBtn" onclick="registerUser()">Register & Request QR</button>
     </div>
 
     <script>
-        function sendData() {
+        function registerUser() {
             const name = document.getElementById('ownerName').value;
             const car = document.getElementById('carNum').value.trim().toUpperCase();
             const phone = document.getElementById('phone').value;
 
             if(!name || !car || !phone) return alert("Please fill all fields!");
 
-            const btn = document.getElementById('submitBtn');
+            const btn = document.getElementById('regBtn');
             btn.innerText = "Processing...";
             btn.disabled = true;
 
-            // اپنا Google Script URL یہاں ڈالیں
-            const scriptURL = 'YOUR_GOOGLE_SCRIPT_WEB_APP_URL'; 
+            // ⚠️ یہاں اپنا گوگل اسکرپٹ URL پیسٹ کریں
+            const scriptURL = 'https://script.google.com/macros/s/AKfycbxxb1SI2J2gPE0UGtlpBql6dRpB-22jP_vTcnw_MurCmWTXcQMo9I63TFUwXpcapQ2Vlg/exec'; 
 
             fetch(scriptURL, { 
                 method: 'POST', 
@@ -47,21 +124,40 @@
                 body: new URLSearchParams({ 'name': name, 'car': car, 'phone': phone })
             })
             .then(() => {
-                document.getElementById('mainCard').innerHTML = `
-                    <div style="padding:10px;">
-                        <h2 style="color:#059669;">✅ Registered!</h2>
-                        <p>Thank you <b>${name}</b>. Your request for <b>${car}</b> has been received.</p>
-                        <p style="font-size:14px;">Please complete your payment. Our team will send your QR Sticker on WhatsApp within 24 hours.</p>
-                        <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
-                        <p style="font-size:12px; color:#999;">Park Hello Security System</p>
-                    </div>
-                `;
+                showSuccess(name, car);
             })
-            .catch(err => {
-                alert("Something went wrong. Please try again.");
+            .catch(error => {
+                alert("Error! Please try again.");
                 btn.disabled = false;
                 btn.innerText = "Register & Request QR";
             });
+        }
+
+        function showSuccess(name, car) {
+            document.getElementById('mainCard').innerHTML = `
+                <div style="text-align: left;">
+                    <h2 style="color:#059669; text-align:center;">✅ Almost Done!</h2>
+                    <p>Thank you <b>${name}</b>. Your request for <b>${car}</b> has been recorded.</p>
+                    
+                    <div class="payment-box">
+                        <h4 style="margin: 0 0 10px 0; color: #f57f17;">💳 Payment Details:</h4>
+                        <p style="font-size: 14px; margin: 5px 0;">Send <b>Rs. [Price]</b> to any account:</p>
+                        <ul style="font-size: 14px; padding-left: 20px; margin: 5px 0;">
+                            <li><b>JazzCash:</b> 03077921584</li>
+                            <li><b>EasyPaisa:</b> 03222813027</li>
+                        </ul>
+                        <p style="font-size: 12px; font-weight: bold; color: #d32f2f; margin-top: 10px;">
+                            ⚠️ Screenshot of receipt is required for QR.
+                        </p>
+                    </div>
+
+                    <a href="https://wa.me/923077921584?text=Hi, I have paid for Vehicle: ${car}" class="whatsapp-btn" style="text-align:center;">
+                        Send Receipt via WhatsApp
+                    </a>
+                    
+                    <p style="font-size:11px; color:#999; margin-top: 25px; text-align: center;">Park Hello Security © 2026</p>
+                </div>
+            `;
         }
     </script>
 </body>
