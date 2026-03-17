@@ -3,27 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello Admin - QR Maker</title>
+    <title>Park Hello Admin - Login</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Poppins', sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
         .admin-card { background: #1e293b; padding: 30px; border-radius: 24px; width: 100%; max-width: 400px; text-align: center; border: 1px solid #334155; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
         input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #334155; border-radius: 12px; background: #0f172a; color: white; box-sizing: border-box; outline: none; }
-        input:focus { border-color: #38bdf8; }
-        .btn-make { width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.3s; }
-        .btn-make:hover { background: #1d4ed8; }
+        .btn-make { width: 100%; padding: 14px; background: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; }
         #qrcode { margin-top: 25px; padding: 15px; background: white; border-radius: 15px; display: inline-block; }
         #downloadBtn { display: none; background: #059669; color: white; padding: 12px; border-radius: 10px; text-decoration: none; margin-top: 20px; font-weight: 600; font-size: 14px; }
+        #adminContent { display: none; } /* چھپا ہوا حصہ */
     </style>
 </head>
 <body>
 
-    <div class="admin-card">
+    <div class="admin-card" id="loginBox">
+        <h2>🔐 Admin Login</h2>
+        <input type="password" id="passInput" placeholder="Enter Admin Password">
+        <button class="btn-make" onclick="checkPass()">Login</button>
+    </div>
+
+    <div class="admin-card" id="adminContent">
         <h2 style="margin-bottom: 5px;">🛠️ Admin QR Panel</h2>
-        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Generate QR after Payment Confirmation</p>
+        <p style="color: #94a3b8; font-size: 13px; margin-bottom: 20px;">Generate Official Sticker</p>
         
-        <input type="text" id="adminName" placeholder="Owner Full Name (from sheet)">
+        <input type="text" id="adminName" placeholder="Owner Full Name">
         <input type="text" id="adminCar" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
         <input type="tel" id="adminPhone" placeholder="Owner Phone Number">
         
@@ -35,24 +40,34 @@
     </div>
 
     <script>
+        // آپ کا پاسورڈ یہاں ہے (آپ اسے بدل بھی سکتے ہیں)
+        const secretPass = "park786"; 
+
+        function checkPass() {
+            const input = document.getElementById('passInput').value;
+            if(input === secretPass) {
+                document.getElementById('loginBox').style.display = "none";
+                document.getElementById('adminContent').style.display = "block";
+            } else {
+                alert("Wrong Password!");
+            }
+        }
+
         function adminMakeQR() {
             const name = document.getElementById('adminName').value;
             const car = document.getElementById('adminCar').value.trim().toUpperCase();
             const phone = document.getElementById('adminPhone').value;
 
-            if(!name || !car || !phone) return alert("Please fill all details from the Google Sheet!");
+            if(!name || !car || !phone) return alert("Fill all details!");
 
-            // یہ لنک کسٹمر کے اسکین کرنے پر اس کا پروفائل کارڈ دکھائے گا
             const folderPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
             const profileUrl = window.location.origin + folderPath + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
 
             document.getElementById('qrcode').innerHTML = "";
             new QRCode(document.getElementById("qrcode"), {
                 text: profileUrl,
-                width: 200,
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
+                width: 200, height: 200,
+                colorDark : "#000000", colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
             });
 
