@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Hello - Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 380px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        .btn { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+        #qrcode { margin-top: 20px; display: flex; justify-content: center; background: white; padding: 10px; }
+        #downloadBtn { display: none; background: #059669; margin-top: 15px; text-decoration: none; color: white; padding: 10px; border-radius: 8px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2 style="margin:0;">🅿️ Park Hello</h2>
+        <p style="color:#666; font-size:14px;">Vehicle Registration</p>
+        
+        <input type="text" id="ownerName" placeholder="Owner Name">
+        <input type="text" id="carNum" placeholder="Vehicle Number" style="text-transform:uppercase;">
+        <input type="tel" id="phone" placeholder="Phone Number">
+        
+        <button class="btn" onclick="generate()">Generate QR Code</button>
+
+        <div id="qrcode"></div>
+        <a href="#" id="downloadBtn" download="ParkHelloQR.png">📥 Save QR Code</a>
+    </div>
+
+    <script>
+        function generate() {
+            const name = document.getElementById('ownerName').value;
+            const car = document.getElementById('carNum').value.trim();
+            const phone = document.getElementById('phone').value;
+
+            if(!name || !car || !phone) return alert("Please fill all fields!");
+
+            // SMART LINK: یہ خود ہی صحیح لنک بنائے گا چاہے فائل کہیں بھی ہو
+            const folderPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+            const profileUrl = window.location.origin + folderPath + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
+
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), {
+                text: profileUrl,
+                width: 180,
+                height: 180
+            });
+
+            // ڈاؤن لوڈ بٹن سیٹ کرنا
+            setTimeout(() => {
+                const img = document.querySelector('#qrcode img');
+                if(img) {
+                    document.getElementById('downloadBtn').href = img.src;
+                    document.getElementById('downloadBtn').style.display = "block";
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html>
