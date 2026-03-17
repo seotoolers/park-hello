@@ -6,101 +6,29 @@
     <title>Park Hello - Vehicle Registration</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1a73e8;
-            --success: #25d366;
-            --bg: #f1f5f9;
-        }
-
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background: var(--bg); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            margin: 0; 
-            padding: 20px; 
-        }
-
-        .card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 400px; 
-            text-align: center; 
-        }
-
-        .logo { font-size: 40px; margin-bottom: 10px; }
-        h2 { margin: 0; color: #0f172a; }
-        p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
-
-        input { 
-            width: 100%; 
-            padding: 12px 15px; 
-            margin: 10px 0; 
-            border: 2px solid #e2e8f0; 
-            border-radius: 12px; 
-            font-size: 15px; 
-            box-sizing: border-box;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        input:focus { border-color: var(--primary); }
-
-        .btn-submit { 
-            width: 100%; 
-            padding: 14px; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            border-radius: 12px; 
-            font-size: 16px; 
-            font-weight: 600; 
-            cursor: pointer; 
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover { background: #1557b0; transform: translateY(-2px); }
-
-        /* Payment UI */
-        .payment-box {
-            text-align: left;
-            background: #fff9c4;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #fbc02d;
-            margin: 20px 0;
-        }
-
-        .whatsapp-btn {
-            display: block;
-            background: var(--success);
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 12px;
-            font-weight: 600;
-            margin-top: 15px;
-        }
+        :root { --primary: #1a73e8; --success: #25d366; --bg: #f1f5f9; --card-gold: #d4af37; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
+        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        .payment-box { text-align: left; background: #fff9c4; padding: 15px; border-radius: 12px; border: 1px solid #fbc02d; margin: 20px 0; }
+        .whatsapp-btn { display: block; background: var(--success); color: white; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 600; margin-top: 15px; text-align: center; }
+        .card-pay-btn { display: block; background: #0f172a; color: white; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px; }
+        .badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; vertical-align: middle; margin-left: 5px; }
     </style>
 </head>
 <body>
 
     <div class="card" id="mainCard">
-        <div class="logo">🅿️</div>
+        <div style="font-size: 40px;">🅿️</div>
         <h2>Park Hello</h2>
-        <p>Register Your Vehicle Securely</p>
+        <p>Lifetime Vehicle Security Access</p>
         
         <input type="text" id="ownerName" placeholder="Owner Full Name">
         <input type="text" id="carNum" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
         <input type="tel" id="phone" placeholder="WhatsApp Number">
         
-        <button class="btn-submit" id="regBtn" onclick="registerUser()">Register & Request QR</button>
+        <button class="btn-submit" id="regBtn" onclick="registerUser()">Register & Get Lifetime QR</button>
     </div>
 
     <script>
@@ -115,7 +43,7 @@
             btn.innerText = "Processing...";
             btn.disabled = true;
 
-            // ⚠️ یہاں اپنا گوگل اسکرپٹ URL پیسٹ کریں
+            // ⚠️ Yahan apna wahi Google Script URL dubara paste karein
             const scriptURL = 'https://script.google.com/macros/s/AKfycbxxb1SI2J2gPE0UGtlpBql6dRpB-22jP_vTcnw_MurCmWTXcQMo9I63TFUwXpcapQ2Vlg/exec'; 
 
             fetch(scriptURL, { 
@@ -127,32 +55,36 @@
                 showSuccess(name, car);
             })
             .catch(error => {
-                alert("Error! Please try again.");
+                alert("Connection Error! Please try again.");
                 btn.disabled = false;
-                btn.innerText = "Register & Request QR";
+                btn.innerText = "Register & Get Lifetime QR";
             });
         }
 
         function showSuccess(name, car) {
             document.getElementById('mainCard').innerHTML = `
                 <div style="text-align: left;">
-                    <h2 style="color:#059669; text-align:center;">✅ Almost Done!</h2>
-                    <p>Thank you <b>${name}</b>. Your request for <b>${car}</b> has been recorded.</p>
+                    <h2 style="color:#059669; text-align:center;">✅ Request Sent!</h2>
+                    <p style="text-align:center;">Thank you <b>${name}</b>. Your lifetime registration for <b>${car}</b> is pending payment.</p>
                     
                     <div class="payment-box">
-                        <h4 style="margin: 0 0 10px 0; color: #f57f17;">💳 Payment Details:</h4>
-                        <p style="font-size: 14px; margin: 5px 0;">Send <b>Rs. [Price]</b> to any account:</p>
-                        <ul style="font-size: 14px; padding-left: 20px; margin: 5px 0;">
+                        <h4 style="margin: 0 0 10px 0; color: #f57f17;">💳 Payment Details (Lifetime):</h4>
+                        <p style="font-size: 15px; margin: 5px 0;">Total Amount: <b>Rs. 500</b></p>
+                        <ul style="font-size: 14px; padding-left: 20px; margin: 10px 0;">
                             <li><b>JazzCash:</b> 03077921584</li>
                             <li><b>EasyPaisa:</b> 03222813027</li>
                         </ul>
-                        <p style="font-size: 12px; font-weight: bold; color: #d32f2f; margin-top: 10px;">
-                            ⚠️ Screenshot of receipt is required for QR.
+                        <p style="font-size: 11px; font-weight: bold; color: #d32f2f; margin-top: 10px;">
+                            ⚠️ Note: Payment ke baad screenshot niche diye gaye WhatsApp par bhejein.
                         </p>
                     </div>
 
-                    <a href="https://wa.me/923077921584?text=Hi, I have paid for Vehicle: ${car}" class="whatsapp-btn" style="text-align:center;">
-                        Send Receipt via WhatsApp
+                    <a href="https://wa.me/923060157873?text=Hi, I have paid 500 PKR for Lifetime QR. Vehicle: ${car}" class="whatsapp-btn">
+                        Submit Receipt (WhatsApp)
+                    </a>
+
+                    <a href="javascript:void(0)" onclick="alert('Card Payment System is being integrated. Please use JazzCash/EasyPaisa for now.')" class="card-pay-btn">
+                        Pay via Debit/Credit Card <span class="badge">COMING SOON</span>
                     </a>
                     
                     <p style="font-size:11px; color:#999; margin-top: 25px; text-align: center;">Park Hello Security © 2026</p>
