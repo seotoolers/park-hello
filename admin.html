@@ -3,71 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Ultra Admin</title>
+    <title>Park Hello - Executive Admin</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --border: #e2e8f0; --primary: #1a73e8; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --border: #334155; }
-
         body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); padding: 20px; transition: 0.3s; }
-        .container { max-width: 900px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid var(--border); }
-        
-        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        h2 { margin: 0; color: var(--primary); }
-        
-        /* Toggle Button */
-        .theme-btn { padding: 8px 15px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-size: 14px; }
-
-        .controls { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: center; }
-        select { padding: 8px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); }
-
-        table { width: 100%; border-collapse: collapse; }
+        .container { max-width: 1000px; margin: auto; background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .controls { background: var(--bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; align-items: center; }
+        select, button { padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background: rgba(0,0,0,0.02); }
-
-        .btn-qr { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .btn-qr { background: var(--primary); color: white; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 600; cursor: pointer; }
         
-        /* QR Modal */
-        #qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; width: 320px; position: relative; color: #000; }
-        
-        .sticker-frame { border: 2px solid #eee; padding: 25px; border-radius: 15px; margin-bottom: 20px; background: #fff; }
-        .contact-title { font-size: 24px; font-weight: bold; line-height: 1.2; margin-top: 15px; }
+        /* Modal & Sticker */
+        #qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 25px; border-radius: 25px; text-align: center; width: 320px; color: #000; }
+        .sticker-frame { border: 2px solid #eee; padding: 20px; border-radius: 15px; background: #fff; margin-bottom: 15px; }
+        .contact-title { font-size: 22px; font-weight: bold; line-height: 1.1; margin-top: 10px; text-transform: uppercase; }
         .contact-title span { display: block; }
-        .promo-text { font-size: 11px; color: #64748b; margin-top: 10px; font-weight: 600; }
-        .whatsapp-link { font-size: 12px; font-weight: bold; color: #25d366; text-decoration: none; display: block; margin-top: 5px; }
-        
-        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 25px; cursor: pointer; color: #94a3b8; }
+        .pulse-text { color: red; font-size: 9px; font-weight: bold; animation: blink 1s infinite; margin-top: 10px; display: block; }
+        @keyframes blink { 50% { opacity: 0; } }
     </style>
 </head>
 <body data-theme="light">
 
 <div class="container">
     <div class="header-flex">
-        <h2>🅿️ Park Hello Admin</h2>
-        <button class="theme-btn" onclick="toggleTheme()">🌓 Dark/Light</button>
+        <h2 style="color: var(--primary);">🅿️ Park Hello Admin</h2>
+        <button onclick="toggleTheme()">🌓 Dark/Light</button>
     </div>
-    
+
     <div class="controls">
-        <label>QR Theme Color:</label>
+        <label>Sticker Theme:</label>
         <select id="qrColor">
             <option value="#000000">Classic Black</option>
             <option value="#1a73e8" selected>Electric Blue</option>
-            <option value="#059669">Safety Green</option>
             <option value="#dc2626">Emergency Red</option>
-            <option value="#7c3aed">Royal Purple</option>
-            <option value="#ea580c">Bright Orange</option>
+            <option value="#059669">Safety Green</option>
         </select>
-        <button onclick="loadUsers()" class="theme-btn">🔄 Refresh Data</button>
+        <button onclick="loadUsers()">🔄 Refresh User List</button>
     </div>
 
     <table id="userTable">
         <thead>
             <tr>
-                <th>Owner Name</th>
-                <th>Vehicle #</th>
-                <th>Action</th>
+                <th>Owner</th>
+                <th>Vehicle</th>
+                <th>Blood</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody id="tableBody"></tbody>
@@ -76,15 +62,16 @@
 
 <div id="qr-modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">×</span>
+        <span onclick="closeModal()" style="position:absolute; top:10px; right:20px; cursor:pointer; font-size:25px;">×</span>
         <div id="printable-sticker" class="sticker-frame">
             <div id="qrcode" style="display: flex; justify-content: center;"></div>
             <div class="contact-title" id="stickerTitle">
                 <span>Contact</span><span>Car</span><span>Owner</span>
             </div>
-            <div id="sticker-car-num" style="font-weight: bold; font-size: 18px; margin-top: 10px;"></div>
-            <p class="promo-text">Scan here to get this for your car!</p>
-            <a href="https://wa.me/923060157873" class="whatsapp-link">📲 Contact Us: 03060157873</a>
+            <div id="sticker-car-num" style="font-weight: bold; font-size: 18px; margin-top: 5px;"></div>
+            <span class="pulse-text">ONLY FOR ACCIDENTS / MEDICAL EMERGENCY</span>
+            <p style="font-size: 10px; color: #64748b; margin: 5px 0;">Want this? Scan to Register!</p>
+            <small style="font-size: 9px; font-weight: bold; color: #25d366;">WhatsApp: 03060157873</small>
         </div>
         <button class="btn-qr" onclick="downloadSticker()" style="width: 100%;">📥 Download PNG</button>
     </div>
@@ -95,47 +82,48 @@
     const scriptURL = 'https://script.google.com/macros/s/AKfycbzCfBRCwz0ucFM56xOUyO5R_J-dtigaShZi5Rw3s4R4ZfldQ40qUIFKAJPLwpvTsaVM/exec';
 
     function toggleTheme() {
-        const body = document.body;
-        const current = body.getAttribute('data-theme');
-        body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+        const b = document.body;
+        b.setAttribute('data-theme', b.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
     }
 
     async function loadUsers() {
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = "<tr><td colspan='3'>Syncing with Google Sheets...</td></tr>";
+        const body = document.getElementById('tableBody');
+        body.innerHTML = "<tr><td colspan='4'>Fetching Data...</td></tr>";
         try {
-            const response = await fetch(scriptURL);
-            const data = await response.json();
-            tableBody.innerHTML = "";
-            data.forEach(user => {
+            const res = await fetch(scriptURL);
+            const data = await res.json();
+            body.innerHTML = "";
+            data.forEach(u => {
                 let row = `<tr>
-                    <td>${user.name}</td>
-                    <td><b>${user.car}</b></td>
-                    <td><button class="btn-qr" onclick="generateSticker('${user.name}', '${user.car}', '${user.phone}')">Make QR</button></td>
+                    <td>${u.name}</td>
+                    <td><b>${u.car}</b></td>
+                    <td><span style="color:red; font-weight:bold;">${u.blood || 'N/A'}</span></td>
+                    <td><button class="btn-qr" onclick="generateQR('${u.name}','${u.car}','${u.phone}','${u.blood}','${u.rel1}','${u.fam1}','${u.m1}','${u.rel2}','${u.fam2}','${u.m2}')">Create Sticker</button></td>
                 </tr>`;
-                tableBody.innerHTML += row;
+                body.innerHTML += row;
             });
-        } catch (error) {
-            tableBody.innerHTML = "<tr><td colspan='3'>Error! Check Script URL.</td></tr>";
-        }
+        } catch (e) { body.innerHTML = "Error loading data!"; }
     }
 
-    function generateSticker(name, car, phone) {
-        const qrColor = document.getElementById('qrColor').value;
-        const folderPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-        const profileUrl = window.location.origin + folderPath + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
+    function generateQR(name, car, phone, blood, rel1, fam1, m1, rel2, fam2, m2) {
+        const color = document.getElementById('qrColor').value;
+        const folder = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         
+        // یہ لنک تمام ڈیٹا کو profile.html تک لے کر جائے گا
+        const url = window.location.origin + folder + "profile.html?" + 
+            `car=${encodeURIComponent(car)}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&blood=${encodeURIComponent(blood)}` +
+            `&rel1=${encodeURIComponent(rel1)}&fam1=${encodeURIComponent(fam1)}&m1=${encodeURIComponent(m1)}` +
+            `&rel2=${encodeURIComponent(rel2)}&fam2=${encodeURIComponent(fam2)}&m2=${encodeURIComponent(m2)}`;
+
         document.getElementById('qr-modal').style.display = 'flex';
         document.getElementById('sticker-car-num').innerText = car;
-        document.getElementById('stickerTitle').style.color = qrColor;
+        document.getElementById('stickerTitle').style.color = color;
         document.getElementById('qrcode').innerHTML = "";
-        
+
         new QRCode(document.getElementById("qrcode"), {
-            text: profileUrl,
-            width: 180, height: 180,
-            colorDark : qrColor,
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
+            text: url, width: 180, height: 180,
+            colorDark: color, colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
         });
     }
 
@@ -145,7 +133,7 @@
         const sticker = document.getElementById('printable-sticker');
         html2canvas(sticker, { scale: 3 }).then(canvas => {
             const link = document.createElement('a');
-            link.download = `Park-Hello-${document.getElementById('sticker-car-num').innerText}.png`;
+            link.download = `ParkHello-${document.getElementById('sticker-car-num').innerText}.png`;
             link.href = canvas.toDataURL();
             link.click();
         });
