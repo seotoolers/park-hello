@@ -3,94 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Vehicle Registration</title>
+    <title>Park Hello - Emergency Registration</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --success: #25d366; --bg: #f1f5f9; --card-gold: #d4af37; }
+        :root { --primary: #1a73e8; --success: #25d366; --bg: #f1f5f9; }
         body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; }
-        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; }
-        .payment-box { text-align: left; background: #fff9c4; padding: 15px; border-radius: 12px; border: 1px solid #fbc02d; margin: 20px 0; }
-        .whatsapp-btn { display: block; background: var(--success); color: white; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 600; margin-top: 15px; text-align: center; }
-        .card-pay-btn { display: block; background: #0f172a; color: white; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: 600; margin-top: 10px; text-align: center; font-size: 14px; }
-        .badge { background: #fee2e2; color: #dc2626; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; vertical-align: middle; margin-left: 5px; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
+        h2 { text-align: center; color: #1e293b; margin-bottom: 5px; }
+        p { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; }
+        input:focus { border-color: var(--primary); }
+        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 16px; transition: 0.3s; }
+        .btn-submit:hover { background: #1557b0; }
+        .section-label { font-size: 12px; font-weight: bold; color: #1a73e8; margin-top: 10px; display: block; text-transform: uppercase; }
+        .payment-box { background: #fff9c4; padding: 15px; border-radius: 12px; border: 1px solid #fbc02d; margin-top: 20px; }
+        .whatsapp-btn { display: block; background: var(--success); color: white; text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="mainCard">
-        <div style="font-size: 40px;">🅿️</div>
-        <h2>Park Hello</h2>
-        <p>Lifetime Vehicle Security Access</p>
-        
-        <input type="text" id="ownerName" placeholder="Owner Full Name">
-        <input type="text" id="carNum" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
-        <input type="tel" id="phone" placeholder="WhatsApp Number">
-        
-        <button class="btn-submit" id="regBtn" onclick="registerUser()">Register & Get Lifetime QR</button>
-    </div>
+<div class="card" id="mainCard">
+    <h2>🅿️ Park Hello</h2>
+    <p>Lifetime Emergency & Parking Registration</p>
+    
+    <span class="section-label">Basic Details</span>
+    <input type="text" id="ownerName" placeholder="Owner Full Name">
+    <input type="text" id="carNum" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
+    <input type="tel" id="phone" placeholder="Your WhatsApp Number">
 
-    <script>
-        function registerUser() {
-            const name = document.getElementById('ownerName').value;
-            const car = document.getElementById('carNum').value.trim().toUpperCase();
-            const phone = document.getElementById('phone').value;
+    <span class="section-label">Medical Info (For Emergency)</span>
+    <select id="bloodGroup">
+        <option value="">Select Blood Group</option>
+        <option value="A+">A+</option><option value="A-">A-</option>
+        <option value="B+">B+</option><option value="B-">B-</option>
+        <option value="AB+">AB+</option><option value="AB-">AB-</option>
+        <option value="O+">O+</option><option value="O-">O-</option>
+    </select>
+    <input type="text" id="history" placeholder="Medical History (Sugar, Heart, etc.)">
+    <input type="text" id="meds" placeholder="Current Medications">
 
-            if(!name || !car || !phone) return alert("Please fill all fields!");
+    <span class="section-label">Family Contacts</span>
+    <input type="tel" id="fam1" placeholder="Emergency Contact 1 (Family)">
+    <input type="tel" id="fam2" placeholder="Emergency Contact 2 (Family)">
 
-            const btn = document.getElementById('regBtn');
-            btn.innerText = "Processing...";
-            btn.disabled = true;
+    <button class="btn-submit" id="regBtn" onclick="registerUser()">Register for Lifetime (Rs. 500)</button>
+</div>
 
-            // ⚠️ Yahan apna wahi Google Script URL dubara paste karein
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbxxb1SI2J2gPE0UGtlpBql6dRpB-22jP_vTcnw_MurCmWTXcQMo9I63TFUwXpcapQ2Vlg/exec'; 
+<script>
+    function registerUser() {
+        const data = {
+            name: document.getElementById('ownerName').value,
+            car: document.getElementById('carNum').value.trim().toUpperCase(),
+            phone: document.getElementById('phone').value,
+            blood: document.getElementById('bloodGroup').value,
+            history: document.getElementById('history').value,
+            meds: document.getElementById('meds').value,
+            fam1: document.getElementById('fam1').value,
+            fam2: document.getElementById('fam2').value
+        };
 
-            fetch(scriptURL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                body: new URLSearchParams({ 'name': name, 'car': car, 'phone': phone })
-            })
-            .then(() => {
-                showSuccess(name, car);
-            })
-            .catch(error => {
-                alert("Connection Error! Please try again.");
-                btn.disabled = false;
-                btn.innerText = "Register & Get Lifetime QR";
-            });
-        }
+        if(!data.name || !data.car || !data.phone) return alert("Please fill basic details!");
 
-        function showSuccess(name, car) {
-            document.getElementById('mainCard').innerHTML = `
-                <div style="text-align: left;">
-                    <h2 style="color:#059669; text-align:center;">✅ Request Sent!</h2>
-                    <p style="text-align:center;">Thank you <b>${name}</b>. Your lifetime registration for <b>${car}</b> is pending payment.</p>
-                    
-                    <div class="payment-box">
-                        <h4 style="margin: 0 0 10px 0; color: #f57f17;">💳 Payment Details (Lifetime):</h4>
-                        <p style="font-size: 15px; margin: 5px 0;">Total Amount: <b>Rs. 500</b></p>
-                        <ul style="font-size: 14px; padding-left: 20px; margin: 10px 0;">
-                            <li><b>JazzCash:</b> 03077921584</li>
-                            <li><b>EasyPaisa:</b> 03222813027</li>
-                        </ul>
-                        <p style="font-size: 11px; font-weight: bold; color: #d32f2f; margin-top: 10px;">
-                            ⚠️ Note: Payment ke baad screenshot niche diye gaye WhatsApp par bhejein.
-                        </p>
-                    </div>
+        const btn = document.getElementById('regBtn');
+        btn.innerText = "Processing...";
+        btn.disabled = true;
 
-                    <a href="https://wa.me/923060157873?text=Hi, I have paid 500 PKR for Lifetime QR. Vehicle: ${car}" class="whatsapp-btn">
-                        Submit Receipt (WhatsApp)
-                    </a>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCfBRCwz0ucFM56xOUyO5R_J-dtigaShZi5Rw3s4R4ZfldQ40qUIFKAJPLwpvTsaVM/exec'; 
 
-                    <a href="javascript:void(0)" onclick="alert('Card Payment System is being integrated. Please use JazzCash/EasyPaisa for now.')" class="card-pay-btn">
-                        Pay via Debit/Credit Card <span class="badge">COMING SOON</span>
-                    </a>
-                    
-                    <p style="font-size:11px; color:#999; margin-top: 25px; text-align: center;">Park Hello Security © 2026</p>
-                </div>
-            `;
-        }
-    </script>
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors', 
+            body: new URLSearchParams(data)
+        })
+        .then(() => showSuccess(data.name, data.car))
+        .catch(() => { alert("Error!"); btn.disabled = false; btn.innerText = "Register for Lifetime (Rs. 500)"; });
+    }
+
+    function showSuccess(name, car) {
+        document.getElementById('mainCard').innerHTML = `
+            <h2 style="color:#059669;">✅ Request Sent!</h2>
+            <p>Thank you <b>${name}</b>. Your details for <b>${car}</b> are recorded.</p>
+            <div class="payment-box">
+                <h4 style="margin:0;">💳 Pay Rs. 500 (Lifetime)</h4>
+                <p style="margin:5px 0; text-align:left;"><b>JazzCash:</b> 03077921584<br><b>EasyPaisa:</b> 03222813027</p>
+            </div>
+            <a href="https://wa.me/923060157873?text=Hi, I paid 500 for ${car}" class="whatsapp-btn">Send Receipt to 03060157873</a>
+        `;
+    }
+</script>
 </body>
 </html>
