@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Vehicle Registration</title>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <title>Park Hello - Vehicle Details</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    
     <style>
         :root {
-            --primary: #1a73e8;
-            --dark: #0f172a;
+            --brand-blue: #1a73e8;
+            --dark-blue: #0d47a1;
+            --success: #059669;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: #f1f5f9;
+            background: linear-gradient(135deg, #1a73e8 0%, #0c4a6e 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,143 +23,146 @@
             padding: 20px;
         }
 
-        .card {
+        .profile-card {
             background: white;
-            padding: 40px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
             text-align: center;
+            animation: slideUp 0.6s ease;
         }
 
-        .logo { font-size: 40px; margin-bottom: 5px; }
-        h2 { color: var(--dark); margin-bottom: 5px; font-weight: 600; }
-        p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
-
-        .form-group { text-align: left; margin-bottom: 15px; }
-        label { font-size: 13px; font-weight: 600; color: #475569; display: block; margin-bottom: 5px; margin-left: 5px; }
-
-        input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-            box-sizing: border-box;
-        }
-
-        input:focus { border-color: var(--primary); background: #f8fafc; }
-
-        .btn-generate {
-            width: 100%;
-            padding: 14px;
-            background: var(--primary);
+        .header {
+            background: var(--brand-blue);
+            padding: 25px;
             color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
+        }
+
+        .header h2 { margin: 0; font-size: 24px; }
+        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 12px; letter-spacing: 1px; }
+
+        .content { padding: 30px 20px; }
+
+        .info-box {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8fafc;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #64748b;
             font-weight: 600;
-            cursor: pointer;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .vehicle-tag {
+            font-size: 28px;
+            color: var(--brand-blue);
+            background: #eef2ff;
+            border: 2px dashed var(--brand-blue);
+            padding: 10px;
+            border-radius: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .call-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--success);
+            color: white;
+            text-decoration: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
             margin-top: 10px;
             transition: 0.3s;
         }
 
-        .btn-generate:hover { background: #1557b0; transform: translateY(-2px); }
+        .call-btn:hover { background: #047857; transform: scale(1.05); }
 
-        #result {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #e2e8f0;
-            display: none;
-            animation: fadeIn 0.5s ease;
+        .footer {
+            background: #f1f5f9;
+            padding: 15px;
+            font-size: 11px;
+            color: #94a3b8;
         }
 
-        canvas {
-            border: 10px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .btn-download {
-            background: #059669;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="logo">🅿️</div>
-        <h2>Park Hello</h2>
-        <p>Vehicle Registration Page</p>
-        
-        <div class="form-group">
-            <label>Owner Full Name</label>
-            <input type="text" id="ownerName" placeholder="Enter name">
+    <div class="profile-card">
+        <div class="header">
+            <h2>Park Hello</h2>
+            <p>VEHICLE SECURITY SYSTEM</p>
         </div>
 
-        <div class="form-group">
-            <label>Vehicle Number</label>
-            <input type="text" id="carNum" placeholder="e.g. LEC-1234" style="text-transform: uppercase;">
+        <div class="content">
+            <div class="info-box">
+                <div class="label">Registered Owner</div>
+                <div class="value" id="ownerName">Loading...</div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Vehicle Plate Number</div>
+                <div class="value vehicle-tag" id="carNum">...</div>
+            </div>
+
+            <div class="info-box">
+                <div class="label">Contact Detail</div>
+                <div class="value" id="phoneDisplay">...</div>
+            </div>
+
+            <a href="#" id="callLink" class="call-btn">
+                📞 Call Owner
+            </a>
         </div>
 
-        <div class="form-group">
-            <label>Contact Number</label>
-            <input type="tel" id="phone" placeholder="03xx-xxxxxxx">
-        </div>
-        
-        <button class="btn-generate" onclick="generateQR()">Generate QR Code</button>
-
-        <div id="result">
-            <div id="qrcode"></div>
-            <a href="#" class="btn-download" id="downloadBtn" onclick="downloadQR()">📥 Save QR Code</a>
-            <p style="margin-top:10px; font-size: 12px;">Print this QR and paste it on your vehicle.</p>
+        <div class="footer">
+            Verified Digital ID • Park Hello Security<br>
+            <span id="timestamp"></span>
         </div>
     </div>
 
     <script>
-        function generateQR() {
-            const name = document.getElementById('ownerName').value;
-            const car = document.getElementById('carNum').value.trim().toUpperCase();
-            const phone = document.getElementById('phone').value;
+        // URL سے ڈیٹا نکالنا
+        const params = new URLSearchParams(window.location.search);
+        const name = params.get('name') || "Not Available";
+        const car = params.get('car') || "Not Available";
+        const phone = params.get('phone') || "";
 
-            if (!name || !car || !phone) {
-                alert("Please fill all fields!");
-                return;
-            }
-            
-            // پروفائل لنک بنانا (ڈیٹا کو URL میں شامل کرنا)
-            const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
-            const profileUrl = `${currentPath}profile.html?car=${encodeURIComponent(car)}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`;
-            
-            document.getElementById('qrcode').innerHTML = "";
-            QRCode.toCanvas(document.getElementById('qrcode'), profileUrl, { 
-                width: 200,
-                margin: 2
-            }, function (error, canvas) {
-                if (error) console.error(error);
-                document.getElementById('result').style.display = "block";
-            });
+        // پیج پر ڈیٹا سیٹ کرنا
+        document.getElementById('ownerName').innerText = name;
+        document.getElementById('carNum').innerText = car.toUpperCase();
+        document.getElementById('phoneDisplay').innerText = phone;
+        
+        // کال بٹن کا لنک سیٹ کرنا
+        if(phone) {
+            document.getElementById('callLink').href = "tel:" + phone;
+        } else {
+            document.getElementById('callLink').style.display = "none";
         }
 
-        function downloadQR() {
-            const canvas = document.querySelector('canvas');
-            const link = document.getElementById('downloadBtn');
-            link.href = canvas.toDataURL("image/png");
-            link.download = `ParkHello-${document.getElementById('carNum').value}.png`;
-        }
+        // ٹائم سٹیمپ
+        document.getElementById('timestamp').innerText = "Checked on: " + new Date().toLocaleString();
     </script>
 
 </body>
