@@ -3,167 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Vehicle Details</title>
+    <title>Park Hello - Vehicle Registration</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-blue: #1a73e8;
-            --dark-blue: #0d47a1;
-            --success: #059669;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #1a73e8 0%, #0c4a6e 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .profile-card {
-            background: white;
-            width: 100%;
-            max-width: 380px;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-            text-align: center;
-            animation: slideUp 0.6s ease;
-        }
-
-        .header {
-            background: var(--brand-blue);
-            padding: 25px;
-            color: white;
-        }
-
-        .header h2 { margin: 0; font-size: 24px; }
-        .header p { margin: 5px 0 0; opacity: 0.9; font-size: 12px; letter-spacing: 1px; }
-
-        .content { padding: 30px 20px; }
-
-        .info-box {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #f8fafc;
-            border-radius: 15px;
-            border: 1px solid #e2e8f0;
-        }
-
-        .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #64748b;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .value {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1e293b;
-        }
-
-        .vehicle-tag {
-            font-size: 28px;
-            color: var(--brand-blue);
-            background: #eef2ff;
-            border: 2px dashed var(--brand-blue);
-            padding: 10px;
-            border-radius: 12px;
-            display: block;
-            margin-top: 5px;
-        }
-
-        .call-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--success);
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 50px;
-            font-weight: 600;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-
-        .call-btn:hover { background: #047857; transform: scale(1.05); }
-
-        .footer {
-            background: #f1f5f9;
-            padding: 15px;
-            font-size: 11px;
-            color: #94a3b8;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); width: 100%; max-width: 400px; text-align: center; }
+        .logo { font-size: 40px; margin-bottom: 5px; }
+        h2 { color: #0f172a; margin-bottom: 5px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; }
+        .btn-generate { width: 100%; padding: 14px; background: #1a73e8; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; }
+        #qrcode { margin: 20px auto; display: flex; justify-content: center; }
+        .btn-save { display: none; background: #059669; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; margin-top: 10px; font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="profile-card">
-        <div class="header">
-            <h2>Park Hello</h2>
-            <p>VEHICLE SECURITY SYSTEM</p>
-        </div>
+    <div class="card">
+        <div class="logo">🅿️</div>
+        <h2>Park Hello</h2>
+        <p>Vehicle Registration Page</p>
+        
+        <input type="text" id="ownerName" placeholder="Owner Full Name">
+        <input type="text" id="carNum" placeholder="Vehicle Number (e.g. ABC-123)" style="text-transform: uppercase;">
+        <input type="tel" id="phone" placeholder="Contact Number">
+        
+        <button class="btn-generate" onclick="makeQR()">Generate QR Code</button>
 
-        <div class="content">
-            <div class="info-box">
-                <div class="label">Registered Owner</div>
-                <div class="value" id="ownerName">Loading...</div>
-            </div>
-
-            <div class="info-box">
-                <div class="label">Vehicle Plate Number</div>
-                <div class="value vehicle-tag" id="carNum">...</div>
-            </div>
-
-            <div class="info-box">
-                <div class="label">Contact Detail</div>
-                <div class="value" id="phoneDisplay">...</div>
-            </div>
-
-            <a href="#" id="callLink" class="call-btn">
-                📞 Call Owner
-            </a>
-        </div>
-
-        <div class="footer">
-            Verified Digital ID • Park Hello Security<br>
-            <span id="timestamp"></span>
-        </div>
+        <div id="qrcode"></div>
+        <a href="#" class="btn-save" id="downloadBtn" download="MyVehicleQR.png">📥 Save QR Code</a>
     </div>
 
     <script>
-        // URL سے ڈیٹا نکالنا
-        const params = new URLSearchParams(window.location.search);
-        const name = params.get('name') || "Not Available";
-        const car = params.get('car') || "Not Available";
-        const phone = params.get('phone') || "";
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            width: 200,
+            height: 200
+        });
 
-        // پیج پر ڈیٹا سیٹ کرنا
-        document.getElementById('ownerName').innerText = name;
-        document.getElementById('carNum').innerText = car.toUpperCase();
-        document.getElementById('phoneDisplay').innerText = phone;
-        
-        // کال بٹن کا لنک سیٹ کرنا
-        if(phone) {
-            document.getElementById('callLink').href = "tel:" + phone;
-        } else {
-            document.getElementById('callLink').style.display = "none";
+        function makeQR() {
+            const name = document.getElementById('ownerName').value;
+            const car = document.getElementById('carNum').value.trim().toUpperCase();
+            const phone = document.getElementById('phone').value;
+
+            if (!name || !car || !phone) {
+                alert("Please fill all fields!");
+                return;
+            }
+
+            // GitHub Pages کے لیے صحیح لنک بنانا
+            const currentUrl = window.location.href.split('index.html')[0].split('#')[0];
+            const profileUrl = currentUrl + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
+
+            qrcode.clear(); 
+            qrcode.makeCode(profileUrl);
+
+            // ڈاؤن لوڈ بٹن دکھانا
+            setTimeout(() => {
+                const img = document.querySelector('#qrcode img');
+                if (img) {
+                    document.getElementById('downloadBtn').href = img.src;
+                    document.getElementById('downloadBtn').style.display = "inline-block";
+                }
+            }, 500);
         }
-
-        // ٹائم سٹیمپ
-        document.getElementById('timestamp').innerText = "Checked on: " + new Date().toLocaleString();
     </script>
-
 </body>
 </html>
