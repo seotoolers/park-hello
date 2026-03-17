@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Park Hello - Vehicle Registration</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --dark: #0f172a;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f1f5f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .logo { font-size: 40px; margin-bottom: 5px; }
+        h2 { color: var(--dark); margin-bottom: 5px; font-weight: 600; }
+        p { color: #64748b; font-size: 14px; margin-bottom: 25px; }
+
+        .form-group { text-align: left; margin-bottom: 15px; }
+        label { font-size: 13px; font-weight: 600; color: #475569; display: block; margin-bottom: 5px; margin-left: 5px; }
+
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        input:focus { border-color: var(--primary); background: #f8fafc; }
+
+        .btn-generate {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-generate:hover { background: #1557b0; transform: translateY(-2px); }
+
+        #result {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        canvas {
+            border: 10px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        .btn-download {
+            background: #059669;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="logo">🅿️</div>
+        <h2>Park Hello</h2>
+        <p>Vehicle Registration Page</p>
+        
+        <div class="form-group">
+            <label>Owner Full Name</label>
+            <input type="text" id="ownerName" placeholder="Enter name">
+        </div>
+
+        <div class="form-group">
+            <label>Vehicle Number</label>
+            <input type="text" id="carNum" placeholder="e.g. LEC-1234" style="text-transform: uppercase;">
+        </div>
+
+        <div class="form-group">
+            <label>Contact Number</label>
+            <input type="tel" id="phone" placeholder="03xx-xxxxxxx">
+        </div>
+        
+        <button class="btn-generate" onclick="generateQR()">Generate QR Code</button>
+
+        <div id="result">
+            <div id="qrcode"></div>
+            <a href="#" class="btn-download" id="downloadBtn" onclick="downloadQR()">📥 Save QR Code</a>
+            <p style="margin-top:10px; font-size: 12px;">Print this QR and paste it on your vehicle.</p>
+        </div>
+    </div>
+
+    <script>
+        function generateQR() {
+            const name = document.getElementById('ownerName').value;
+            const car = document.getElementById('carNum').value.trim().toUpperCase();
+            const phone = document.getElementById('phone').value;
+
+            if (!name || !car || !phone) {
+                alert("Please fill all fields!");
+                return;
+            }
+            
+            // پروفائل لنک بنانا (ڈیٹا کو URL میں شامل کرنا)
+            const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf("/") + 1);
+            const profileUrl = `${currentPath}profile.html?car=${encodeURIComponent(car)}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}`;
+            
+            document.getElementById('qrcode').innerHTML = "";
+            QRCode.toCanvas(document.getElementById('qrcode'), profileUrl, { 
+                width: 200,
+                margin: 2
+            }, function (error, canvas) {
+                if (error) console.error(error);
+                document.getElementById('result').style.display = "block";
+            });
+        }
+
+        function downloadQR() {
+            const canvas = document.querySelector('canvas');
+            const link = document.getElementById('downloadBtn');
+            link.href = canvas.toDataURL("image/png");
+            link.download = `ParkHello-${document.getElementById('carNum').value}.png`;
+        }
+    </script>
+
+</body>
+</html>
