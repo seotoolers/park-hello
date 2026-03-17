@@ -3,93 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Emergency Registration</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Park Hello - Smart Registration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #1a73e8; --success: #25d366; --bg: #f1f5f9; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
-        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
-        h2 { text-align: center; color: #1e293b; margin-bottom: 5px; }
-        p { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; }
-        input:focus { border-color: var(--primary); }
-        .btn-submit { width: 100%; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; font-size: 16px; transition: 0.3s; }
-        .btn-submit:hover { background: #1557b0; }
-        .section-label { font-size: 12px; font-weight: bold; color: #1a73e8; margin-top: 10px; display: block; text-transform: uppercase; }
-        .payment-box { background: #fff9c4; padding: 15px; border-radius: 12px; border: 1px solid #fbc02d; margin-top: 20px; }
-        .whatsapp-btn { display: block; background: var(--success); color: white; text-decoration: none; padding: 12px; border-radius: 12px; text-align: center; font-weight: 600; margin-top: 10px; }
+        :root { --primary: #1a73e8; --emergency: #dc2626; --bg: #f8fafc; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1e293b; display: flex; justify-content: center; }
+        
+        .form-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; max-width: 480px; }
+        .logo-area { text-align: center; margin-bottom: 25px; }
+        .logo-area h2 { margin: 0; color: var(--primary); font-size: 28px; }
+        .logo-area p { margin: 5px 0 0; font-size: 13px; color: #64748b; }
+
+        .section-title { font-size: 11px; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
+        
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--primary); }
+
+        .row { display: flex; gap: 10px; }
+        .row div { flex: 1; }
+
+        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-submit:hover { background: #1557b0; transform: translateY(-2px); }
+        .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        /* Success Message Styling */
+        .success-box { text-align: center; }
+        .payment-info { background: #fff9c4; padding: 20px; border-radius: 15px; border: 1px dashed #fbc02d; margin: 20px 0; text-align: left; }
+        .whatsapp-btn { display: block; background: #25d366; color: white; text-decoration: none; padding: 14px; border-radius: 12px; font-weight: 600; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="card" id="mainCard">
-    <h2>🅿️ Park Hello</h2>
-    <p>Lifetime Emergency & Parking Registration</p>
-    
-    <span class="section-label">Basic Details</span>
-    <input type="text" id="ownerName" placeholder="Owner Full Name">
-    <input type="text" id="carNum" placeholder="Vehicle Number (e.g. LEC-123)" style="text-transform: uppercase;">
-    <input type="tel" id="phone" placeholder="Your WhatsApp Number">
+<div class="form-card" id="formContainer">
+    <div class="logo-area">
+        <h2>🅿️ Park Hello</h2>
+        <p>Emergency & Smart Parking Solution</p>
+    </div>
 
-    <span class="section-label">Medical Info (For Emergency)</span>
-    <select id="bloodGroup">
-        <option value="">Select Blood Group</option>
-        <option value="A+">A+</option><option value="A-">A-</option>
-        <option value="B+">B+</option><option value="B-">B-</option>
-        <option value="AB+">AB+</option><option value="AB-">AB-</option>
-        <option value="O+">O+</option><option value="O-">O-</option>
-    </select>
-    <input type="text" id="history" placeholder="Medical History (Sugar, Heart, etc.)">
-    <input type="text" id="meds" placeholder="Current Medications">
+    <div id="registrationForm">
+        <span class="section-title">Owner & Vehicle Info</span>
+        <input type="text" id="name" placeholder="Full Name" required>
+        <div class="row">
+            <input type="text" id="car" placeholder="Vehicle No (e.g. LEC-5627)" style="text-transform: uppercase;" required>
+            <select id="blood">
+                <option value="">Blood Group</option>
+                <option value="A+">A+</option><option value="A-">A-</option>
+                <option value="B+">B+</option><option value="B-">B-</option>
+                <option value="AB+">AB+</option><option value="AB-">AB-</option>
+                <option value="O+">O+</option><option value="O-">O-</option>
+            </select>
+        </div>
+        <input type="tel" id="phone" placeholder="Your WhatsApp Number" required>
 
-    <span class="section-label">Family Contacts</span>
-    <input type="tel" id="fam1" placeholder="Emergency Contact 1 (Family)">
-    <input type="tel" id="fam2" placeholder="Emergency Contact 2 (Family)">
+        <span class="section-title">Emergency Contact 1 (Family)</span>
+        <div class="row">
+            <select id="rel1">
+                <option value="">Select Relation</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+                <option value="Wife">Wife</option>
+                <option value="Husband">Husband</option>
+                <option value="Friend">Friend</option>
+                <option value="Cousin">Cousin</option>
+                <option value="Office">Office / Boss</option>
+                <option value="School">School / College</option>
+            </select>
+            <select id="m1">
+                <option value="tel">Phone Call</option>
+                <option value="wa">WhatsApp</option>
+            </select>
+        </div>
+        <input type="tel" id="fam1" placeholder="Contact Number 1">
 
-    <button class="btn-submit" id="regBtn" onclick="registerUser()">Register for Lifetime (Rs. 500)</button>
+        <span class="section-title">Emergency Contact 2 (Family)</span>
+        <div class="row">
+            <select id="rel2">
+                <option value="">Select Relation</option>
+                <option value="Father">Father</option>
+                <option value="Mother">Mother</option>
+                <option value="Brother">Brother</option>
+                <option value="Sister">Sister</option>
+                <option value="Wife">Wife</option>
+                <option value="Husband">Husband</option>
+                <option value="Friend">Friend</option>
+                <option value="Cousin">Cousin</option>
+                <option value="Office">Office / Boss</option>
+                <option value="School">School / College</option>
+            </select>
+            <select id="m2">
+                <option value="tel">Phone Call</option>
+                <option value="wa">WhatsApp</option>
+            </select>
+        </div>
+        <input type="tel" id="fam2" placeholder="Contact Number 2">
+
+        <button class="btn-submit" id="submitBtn" onclick="processRegistration()">Register for Lifetime (Rs. 500)</button>
+    </div>
 </div>
 
 <script>
-    function registerUser() {
+    async function processRegistration() {
+        const btn = document.getElementById('submitBtn');
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCfBRCwz0ucFM56xOUyO5R_J-dtigaShZi5Rw3s4R4ZfldQ40qUIFKAJPLwpvTsaVM/exec';
+
         const data = {
-            name: document.getElementById('ownerName').value,
-            car: document.getElementById('carNum').value.trim().toUpperCase(),
+            name: document.getElementById('name').value,
+            car: document.getElementById('car').value.trim().toUpperCase(),
             phone: document.getElementById('phone').value,
-            blood: document.getElementById('bloodGroup').value,
-            history: document.getElementById('history').value,
-            meds: document.getElementById('meds').value,
+            blood: document.getElementById('blood').value,
+            rel1: document.getElementById('rel1').value,
             fam1: document.getElementById('fam1').value,
-            fam2: document.getElementById('fam2').value
+            m1: document.getElementById('m1').value,
+            rel2: document.getElementById('rel2').value,
+            fam2: document.getElementById('fam2').value,
+            m2: document.getElementById('m2').value
         };
 
-        if(!data.name || !data.car || !data.phone) return alert("Please fill basic details!");
+        if(!data.name || !data.car || !data.phone || !data.rel1 || !data.fam1) {
+            alert("Please fill all basic and emergency details!");
+            return;
+        }
 
-        const btn = document.getElementById('regBtn');
-        btn.innerText = "Processing...";
+        btn.innerText = "Saving your data...";
         btn.disabled = true;
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbzCfBRCwz0ucFM56xOUyO5R_J-dtigaShZi5Rw3s4R4ZfldQ40qUIFKAJPLwpvTsaVM/exec'; 
-
-        fetch(scriptURL, { 
-            method: 'POST', 
-            mode: 'no-cors', 
-            body: new URLSearchParams(data)
-        })
-        .then(() => showSuccess(data.name, data.car))
-        .catch(() => { alert("Error!"); btn.disabled = false; btn.innerText = "Register for Lifetime (Rs. 500)"; });
+        try {
+            await fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: new URLSearchParams(data)
+            });
+            showPaymentSuccess(data.name, data.car);
+        } catch (error) {
+            alert("Something went wrong. Please try again.");
+            btn.disabled = false;
+            btn.innerText = "Register for Lifetime (Rs. 500)";
+        }
     }
 
-    function showSuccess(name, car) {
-        document.getElementById('mainCard').innerHTML = `
-            <h2 style="color:#059669;">✅ Request Sent!</h2>
-            <p>Thank you <b>${name}</b>. Your details for <b>${car}</b> are recorded.</p>
-            <div class="payment-box">
-                <h4 style="margin:0;">💳 Pay Rs. 500 (Lifetime)</h4>
-                <p style="margin:5px 0; text-align:left;"><b>JazzCash:</b> 03077921584<br><b>EasyPaisa:</b> 03222813027</p>
+    function showPaymentSuccess(name, car) {
+        document.getElementById('formContainer').innerHTML = `
+            <div class="success-box">
+                <div style="font-size: 50px;">✅</div>
+                <h2 style="color: #059669; margin-top: 10px;">Request Received!</h2>
+                <p>Hi <b>${name}</b>, we have received your details for vehicle <b>${car}</b>.</p>
+                
+                <div class="payment-info">
+                    <h4 style="margin: 0 0 10px 0; color: #856404;">💳 Complete your Payment:</h4>
+                    <p style="margin: 5px 0; font-size: 14px;"><b>JazzCash:</b> 03077921584</p>
+                    <p style="margin: 5px 0; font-size: 14px;"><b>EasyPaisa:</b> 03222813027</p>
+                    <p style="margin: 10px 0 0 0; font-size: 12px; color: #856404;"><i>Note: After payment, send a screenshot of the receipt.</i></p>
+                </div>
+
+                <a href="https://wa.me/923060157873?text=Hi, I have registered my car ${car} and paid Rs. 500." class="whatsapp-btn">
+                    📲 Send Receipt Screenshot
+                </a>
             </div>
-            <a href="https://wa.me/923060157873?text=Hi, I paid 500 for ${car}" class="whatsapp-btn">Send Receipt to 03060157873</a>
         `;
     }
 </script>
+
 </body>
 </html>
