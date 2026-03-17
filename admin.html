@@ -3,86 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Admin Dashboard</title>
+    <title>Park Hello - Smart Admin</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f1f5f9; padding: 20px; }
-        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        h2 { text-align: center; color: #1e293b; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
-        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: left; }
-        th { background: #1a73e8; color: white; }
-        .btn-qr { background: #059669; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
-        #qr-display { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px; border: 2px solid #1a73e8; border-radius: 20px; display: none; text-align: center; box-shadow: 0 0 100px rgba(0,0,0,0.5); }
-        .close-qr { margin-top: 15px; color: red; cursor: pointer; font-weight: bold; }
+        body { font-family: 'Poppins', sans-serif; background: #f8fafc; padding: 20px; color: #1e293b; }
+        .container { max-width: 900px; margin: auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        h2 { text-align: center; color: #1a73e8; margin-bottom: 25px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; font-weight: 600; }
+        .btn-qr { background: #1a73e8; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        
+        /* QR Preview Modal */
+        #qr-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; width: 320px; position: relative; }
+        
+        /* Sticker Styling */
+        .sticker-frame { border: 2px solid #eee; padding: 20px; border-radius: 15px; margin-bottom: 20px; background: #fff; }
+        .brand-name { font-size: 22px; font-weight: bold; color: #1a73e8; margin-top: 10px; display: block; }
+        .promo-text { font-size: 10px; color: #64748b; margin-top: 5px; font-weight: 600; }
+        
+        .controls { margin-bottom: 20px; display: flex; gap: 10px; align-items: center; justify-content: center; }
+        select { padding: 8px; border-radius: 8px; border: 1px solid #ddd; }
+        .close-btn { position: absolute; top: 10px; right: 15px; font-size: 20px; cursor: pointer; color: #94a3b8; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>📊 Registered Users List</h2>
-    <p id="loading">Loading data from Google Sheets...</p>
+    <h2>📊 Park Hello Dashboard</h2>
+    
+    <div class="controls">
+        <label>QR Theme:</label>
+        <select id="qrColor">
+            <option value="#000000">Classic Black</option>
+            <option value="#1a73e8">Professional Blue</option>
+            <option value="#059669">Safety Green</option>
+            <option value="#dc2626">Emergency Red</option>
+        </select>
+        <button onclick="loadUsers()" style="padding: 8px; cursor: pointer;">🔄 Refresh List</button>
+    </div>
+
     <table id="userTable">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>Vehicle</th>
-                <th>Phone</th>
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody id="tableBody"></tbody>
+        <tbody id="tableBody">
+            </tbody>
     </table>
 </div>
 
-<div id="qr-display">
-    <h3 id="qr-title"></h3>
-    <div id="qrcode"></div>
-    <br>
-    <a href="#" id="downloadLink" download="QR.png" style="color: blue; text-decoration: none; font-weight: bold;">📥 Download Image</a>
-    <div class="close-qr" onclick="document.getElementById('qr-display').style.display='none'">[ CLOSE ]</div>
+<div id="qr-modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">×</span>
+        <div id="printable-sticker" class="sticker-frame">
+            <div id="qrcode" style="display: flex; justify-content: center;"></div>
+            <span class="brand-name">Park Hello</span>
+            <div id="sticker-car-num" style="font-weight: bold; font-size: 14px; margin-top: 5px;"></div>
+            <p class="promo-text">Want this for your car? <br> Scan to Register!</p>
+        </div>
+        <button class="btn-qr" onclick="downloadSticker()" style="width: 100%;">📥 Download Sticker</button>
+    </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script>
-    // ⚠️ اپنا نیا Google Script URL یہاں ڈالیں
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbw3ZgxHD_suMAplDw22LkqYfX-_9kACWwsnmi3Uq2dixqKyGJTJ_NIO9rgrkpKaTqYzig/exec';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbw3ZgxHD_suMAplDw22LkqYfX-_9kACWwsnmi3Uq2dixqKyGJTJ_NIO9rgrkpKaTqYzig'; // ⚠️ یہاں اپنا لنک ضرور ڈالیں
 
-    // لسٹ لوڈ کرنے کا فنکشن
     async function loadUsers() {
+        const tableBody = document.getElementById('tableBody');
+        tableBody.innerHTML = "<tr><td colspan='3'>Loading users...</td></tr>";
+        
         try {
             const response = await fetch(scriptURL);
             const data = await response.json();
-            const tableBody = document.getElementById('tableBody');
-            document.getElementById('loading').style.display = 'none';
+            tableBody.innerHTML = "";
 
             data.forEach(user => {
                 let row = `<tr>
                     <td>${user.name}</td>
-                    <td>${user.car}</td>
-                    <td>${user.phone}</td>
-                    <td><button class="btn-qr" onclick="makeQR('${user.name}', '${user.car}', '${user.phone}')">Make QR</button></td>
+                    <td><b>${user.car}</b></td>
+                    <td><button class="btn-qr" onclick="generateSticker('${user.name}', '${user.car}', '${user.phone}')">Create QR</button></td>
                 </tr>`;
                 tableBody.innerHTML += row;
             });
         } catch (error) {
-            alert("Error loading data. Check if URL is correct and Deployment is set to 'Anyone'.");
+            tableBody.innerHTML = "<tr><td colspan='3'>Error loading data. Make sure Script URL is correct.</td></tr>";
         }
     }
 
-    function makeQR(name, car, phone) {
+    function generateSticker(name, car, phone) {
+        const qrColor = document.getElementById('qrColor').value;
         const folderPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
         const profileUrl = window.location.origin + folderPath + "profile.html?car=" + encodeURIComponent(car) + "&name=" + encodeURIComponent(name) + "&phone=" + encodeURIComponent(phone);
         
-        document.getElementById('qr-display').style.display = 'block';
-        document.getElementById('qr-title').innerText = car;
+        document.getElementById('qr-modal').style.display = 'flex';
+        document.getElementById('sticker-car-num').innerText = car;
         document.getElementById('qrcode').innerHTML = "";
         
-        new QRCode(document.getElementById("qrcode"), { text: profileUrl, width: 200, height: 200 });
+        new QRCode(document.getElementById("qrcode"), {
+            text: profileUrl,
+            width: 180,
+            height: 180,
+            colorDark : qrColor,
+            colorLight : "#ffffff"
+        });
+    }
 
-        setTimeout(() => {
-            const img = document.querySelector('#qrcode img');
-            if(img) document.getElementById('downloadLink').href = img.src;
-        }, 500);
+    function closeModal() {
+        document.getElementById('qr-modal').style.display = 'none';
+    }
+
+    function downloadSticker() {
+        const sticker = document.getElementById('printable-sticker');
+        html2canvas(sticker).then(canvas => {
+            const link = document.createElement('a');
+            link.download = 'Park-Hello-Sticker.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
     }
 
     loadUsers();
