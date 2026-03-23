@@ -3,39 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Vehicle Owner</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Contact Owner</title>
 
 <style>
-body{
-  font-family:'Poppins',sans-serif;
-  background:#0f172a;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
-}
+body{font-family:sans-serif;background:#111;color:#fff;display:flex;justify-content:center;align-items:center;height:100vh}
+.card{background:#222;padding:20px;border-radius:15px;text-align:center;width:300px}
+a{display:block;margin:10px;padding:10px;border-radius:8px;text-decoration:none;color:#fff}
+.call{background:green}
+.wa{background:#25D366}
+</style>
+</head>
 
-/* Card */
-.card{
-  background:#1e293b;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  width:320px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
-}
+<body>
 
-/* Heading */
-h1{
-  font-size:22px;
-  margin-bottom:10px;
-}
+<div class="card">
+<h2>🚗 Vehicle Owner</h2>
+<p id="name"></p>
+<p id="vehicle"></p>
 
-/* Warning */
+<a id="call" class="call">📞 Call</a>
+<a id="wa" class="wa">💬 WhatsApp</a>
+</div>
+
+<script>
+let p = new URLSearchParams(window.location.search);
+
+let name = p.get("name");
+let phone = p.get("phone");
+let vehicle = p.get("vehicle");
+
+document.getElementById("name").innerText = "Name: " + name;
+document.getElementById("vehicle").innerText = "Vehicle: " + vehicle;
+
+document.getElementById("call").href = "tel:"+phone;
+document.getElementById("wa").href = "https://wa.me/"+phone;
+</script>
+
+</body>
+</html>/* Warning */
 .warning{
   background:#ef4444;
   padding:8px;
