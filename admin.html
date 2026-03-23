@@ -2,39 +2,68 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact Vehicle Owner</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Admin Panel</title>
 
 <style>
-body{
-  font-family:'Poppins',sans-serif;
-  background:#0f172a;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-  margin:0;
+body{font-family:sans-serif;background:#f1f5f9;padding:20px}
+table{width:100%;background:#fff;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #ccc}
+th{background:#2563eb;color:#fff}
+button{padding:5px 10px}
+</style>
+</head>
+
+<body>
+
+<h2>📦 Orders</h2>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Phone</th>
+<th>Vehicle</th>
+<th>City</th>
+<th>Address</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="data"></tbody>
+</table>
+
+<script>
+function load(){
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+let html = "";
+
+orders.forEach((o,i)=>{
+html += `
+<tr>
+<td>${o.name}</td>
+<td>${o.phone}</td>
+<td>${o.vehicle}</td>
+<td>${o.city}</td>
+<td>${o.address}</td>
+<td><button onclick="del(${i})">Delete</button></td>
+</tr>`;
+});
+
+document.getElementById("data").innerHTML = html;
 }
 
-/* Card */
-.card{
-  background:#1e293b;
-  padding:25px;
-  border-radius:20px;
-  text-align:center;
-  width:320px;
-  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+function del(i){
+let orders = JSON.parse(localStorage.getItem("orders"));
+orders.splice(i,1);
+localStorage.setItem("orders", JSON.stringify(orders));
+load();
 }
 
-/* Heading */
-h1{
-  font-size:22px;
-  margin-bottom:10px;
-}
+load();
+</script>
 
+</body>
+</html>
 /* Warning */
 .warning{
   background:#ef4444;
