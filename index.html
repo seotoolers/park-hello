@@ -1,40 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Park Hello - Smart Registration</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root { --primary: #1a73e8; --emergency: #dc2626; --bg: #f8fafc; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 20px; color: #1e293b; display: flex; justify-content: center; }
-        
-        .form-card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); width: 100%; max-width: 480px; }
-        .logo-area { text-align: center; margin-bottom: 25px; }
-        .logo-area h2 { margin: 0; color: var(--primary); font-size: 28px; }
-        .logo-area p { margin: 5px 0 0; font-size: 13px; color: #64748b; }
+<div class="controls">
 
-        .section-title { font-size: 11px; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; display: block; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; }
-        
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 14px; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus, select:focus { border-color: var(--primary); }
+  <input type="text" id="name" placeholder="Full Name">
+  
+  <input type="text" id="phone" placeholder="WhatsApp Number (923XXXXXXXXX)">
+  
+  <select id="vehicle">
+    <option value="">Select Vehicle</option>
+    <option>Car</option>
+    <option>Bike</option>
+  </select>
 
-        .row { display: flex; gap: 10px; }
-        .row div { flex: 1; }
+  <input type="text" id="city" placeholder="City">
 
-        .btn-submit { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-        .btn-submit:hover { background: #1557b0; transform: translateY(-2px); }
-        .btn-submit:disabled { background: #cbd5e1; cursor: not-allowed; }
+  <input type="text" id="address" placeholder="Full Mailing Address">
 
-        /* Success Message Styling */
-        .success-box { text-align: center; }
-        .payment-info { background: #fff9c4; padding: 20px; border-radius: 15px; border: 1px dashed #fbc02d; margin: 20px 0; text-align: left; }
-        .whatsapp-btn { display: block; background: #25d366; color: white; text-decoration: none; padding: 14px; border-radius: 12px; font-weight: 600; margin-top: 15px; }
-    </style>
-</head>
-<body>
+  <button onclick="generateQR()">Generate Sticker</button>
 
-<div class="form-card" id="formContainer">
+</div><div class="form-card" id="formContainer">
     <div class="logo-area">
         <h2>🅿️ Park Hello</h2>
         <p>Emergency & Smart Parking Solution</p>
