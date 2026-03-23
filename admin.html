@@ -3,38 +3,125 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel - Park Hello</title>
+<title>Contact Vehicle Owner</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
 body{
   font-family:'Poppins',sans-serif;
-  background:#f1f5f9;
-  padding:20px;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  background:#fff;
-  padding:20px;
-  border-radius:15px;
-  box-shadow:0 10px 30px rgba(0,0,0,0.1);
-}
-
-h1{
-  text-align:center;
-  margin-bottom:20px;
-}
-
-/* Controls */
-.controls{
+  background:#0f172a;
+  color:#fff;
   display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:space-between;
-  margin-bottom:15px;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  margin:0;
+}
+
+/* Card */
+.card{
+  background:#1e293b;
+  padding:25px;
+  border-radius:20px;
+  text-align:center;
+  width:320px;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* Heading */
+h1{
+  font-size:22px;
+  margin-bottom:10px;
+}
+
+/* Warning */
+.warning{
+  background:#ef4444;
+  padding:8px;
+  border-radius:10px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+
+/* Info */
+.info{
+  margin:10px 0;
+  font-size:15px;
+}
+
+/* Buttons */
+.btn{
+  display:block;
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  text-decoration:none;
+  font-weight:600;
+}
+
+.call{
+  background:#22c55e;
+  color:#fff;
+}
+
+.whatsapp{
+  background:#25D366;
+  color:#fff;
+}
+
+/* Footer */
+.footer{
+  margin-top:10px;
+  font-size:12px;
+  opacity:0.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+  <h1>🚗 Vehicle Owner</h1>
+
+  <div class="warning">
+    ⚠️ If vehicle is blocking, please contact owner
+  </div>
+
+  <div class="info" id="name">Name: Loading...</div>
+  <div class="info" id="vehicle">Vehicle: Loading...</div>
+
+  <a id="callBtn" class="btn call">📞 Call Owner</a>
+  <a id="waBtn" class="btn whatsapp" target="_blank">💬 WhatsApp</a>
+
+  <div class="footer">
+    Park Hello • Smart Parking System
+  </div>
+
+</div>
+
+<script>
+
+// 📌 Get data from URL
+let params = new URLSearchParams(window.location.search);
+
+let name = params.get("name") || "Owner";
+let phone = params.get("phone") || "";
+let vehicle = params.get("vehicle") || "Vehicle";
+
+// Show data
+document.getElementById("name").innerText = "Name: " + name;
+document.getElementById("vehicle").innerText = "Vehicle: " + vehicle;
+
+// Buttons
+document.getElementById("callBtn").href = "tel:" + phone;
+document.getElementById("waBtn").href = "https://wa.me/" + phone;
+
+</script>
+
+</body>
+</html>  margin-bottom:15px;
 }
 
 input{
