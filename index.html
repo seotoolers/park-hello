@@ -1,40 +1,76 @@
-<div class="controls">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Park Hello</title>
 
-  <input type="text" id="name" placeholder="Full Name">
-  
-  <input type="text" id="phone" placeholder="WhatsApp Number (923XXXXXXXXX)">
-  
-  <select id="vehicle">
-    <option value="">Select Vehicle</option>
-    <option>Car</option>
-    <option>Bike</option>
-  </select>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-  <input type="text" id="city" placeholder="City">
+<style>
+body{font-family:sans-serif;background:#f1f5f9;padding:20px}
+.container{max-width:500px;margin:auto;background:#fff;padding:20px;border-radius:15px;text-align:center}
+input,select,button{width:100%;margin:5px 0;padding:10px;border-radius:8px}
+button{background:#2563eb;color:#fff;border:none}
+#qrBox{margin-top:15px}
+</style>
+</head>
 
-  <input type="text" id="address" placeholder="Full Mailing Address">
+<body>
 
-  <button onclick="generateQR()">Generate Sticker</button>
+<div class="container">
+<h2>🚗 Park Hello</h2>
 
-</div><div class="form-card" id="formContainer">
-    <div class="logo-area">
-        <h2>🅿️ Park Hello</h2>
-        <p>Emergency & Smart Parking Solution</p>
-    </div>
+<input id="name" placeholder="Full Name">
+<input id="phone" placeholder="923XXXXXXXXX">
+<select id="vehicle">
+<option value="">Vehicle</option>
+<option>Car</option>
+<option>Bike</option>
+</select>
+<input id="city" placeholder="City">
+<input id="address" placeholder="Full Address">
 
-    <div id="registrationForm">
-        <span class="section-title">Owner & Vehicle Info</span>
-        <input type="text" id="name" placeholder="Full Name" required>
-        <div class="row">
-            <input type="text" id="car" placeholder="Vehicle No (e.g. LEC-5627)" style="text-transform: uppercase;" required>
-            <select id="blood">
-                <option value="">Blood Group</option>
-                <option value="A+">A+</option><option value="A-">A-</option>
-                <option value="B+">B+</option><option value="B-">B-</option>
-                <option value="AB+">AB+</option><option value="AB-">AB-</option>
-                <option value="O+">O+</option><option value="O-">O-</option>
-            </select>
-        </div>
+<button onclick="generateQR()">Generate QR</button>
+
+<div id="qrBox"></div>
+
+<button onclick="printQR()">🖨️ Print</button>
+</div>
+
+<script>
+function generateQR(){
+let name = document.getElementById("name").value;
+let phone = document.getElementById("phone").value;
+let vehicle = document.getElementById("vehicle").value;
+let city = document.getElementById("city").value;
+let address = document.getElementById("address").value;
+
+if(!name || !phone || !vehicle || !city || !address){
+alert("Fill all fields!");
+return;
+}
+
+// Save Order
+let orders = JSON.parse(localStorage.getItem("orders")) || [];
+orders.push({name,phone,vehicle,city,address,date:new Date().toLocaleString()});
+localStorage.setItem("orders", JSON.stringify(orders));
+
+// Profile Link
+let link = `profile.html?name=${name}&phone=${phone}&vehicle=${vehicle}`;
+
+// Generate QR
+document.getElementById("qrBox").innerHTML = "";
+new QRCode(document.getElementById("qrBox"), link);
+}
+
+function printQR(){
+window.print();
+}
+</script>
+
+</body>
+</html>        </div>
         <input type="tel" id="phone" placeholder="Your WhatsApp Number" required>
 
         <span class="section-title">Emergency Contact 1 (Family)</span>
